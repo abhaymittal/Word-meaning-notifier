@@ -6,7 +6,7 @@ filename=$1
 
 while read line
 do
-    echo $line
-    
+    word=$(echo $line | awk '{print $1}')
+    echo $word
 
 done < "$filename"
