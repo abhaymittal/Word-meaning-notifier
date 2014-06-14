@@ -9,7 +9,6 @@ wrap_div=$(xmllint --html --xpath '//div[@class="responsive_cell_center"][1]' 12
 wrap_div="$start $wrap_div </body></html>"
 content_div=$(echo $wrap_div | xmllint --html --xpath '//div[@class="etymology"]/preceding-sibling::*' - 2> /dev/null)
 content_div="$start $content_div </body></html>"
-echo $content_div > 789.html
 title=$(echo $content_div | xmllint --html --xpath '//h2[@class="pageTitle"]/text()' - 2> /dev/null)
 echo "<h1>$title</h1>" >> output.html
 syllabi=$(echo $content_div | xmllint --html --xpath '//header[@class="entryHeader"]//span[@class="headsyllabified"]' - 2> /dev/null)
@@ -24,14 +23,12 @@ if [ -n "$pronun_tn" ]
 echo -e "<br><p>--------------------------------------------------------------------</p>" >> output.html
 main_content=$(echo $content_div | xmllint --html --xpath '//section[@class="etymology"]/preceding-sibling::section[@class="senseGroup"]' - 2> /dev/null)
 main_content="$start $main_content </body></html>"
-echo $main_content > 456.html
 count=$(echo $main_content | xmllint --html --xpath 'count(//section[@class="senseGroup"])' - 2> /dev/null)
 
 for((i=1;i<=$count;i++))
 do
     type=$(echo $main_content | xmllint --html --xpath "//section[@class='senseGroup'][$i]" - 2>/dev/null)
     type="$start $type </body></html>"
-    echo $type > "89$i.html"
     part_of_speech=$(echo $type | xmllint --html --xpath "//span[@class='partOfSpeech']/text()" - 2> /dev/null)
     echo -e "<h4>$part_of_speech</h4>" >> output.html
     pronun=$(echo $type | xmllint --html --xpath "//div[@class='headpron']/text()" - 2> /dev/null)
