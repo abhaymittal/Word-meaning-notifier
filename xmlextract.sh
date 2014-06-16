@@ -1,11 +1,12 @@
 #! /bin/bash
 #This scripts extracts info of a word from the oxford english dictionary website
-#Assume webpage is in 123.html
+#Assume page source is provided in $1
 
+function xml_extract {
 start="<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /></head><body>"
 
 echo $start > output.html
-wrap_div=$(xmllint --html --xpath '//div[@class="responsive_cell_center"][1]' 123.html 2> /dev/null)
+wrap_div=$(echo $1 | xmllint --html --xpath '//div[@class="responsive_cell_center"][1]' - 2> /dev/null)
 wrap_div="$start $wrap_div </body></html>"
 content_div=$(echo $wrap_div | xmllint --html --xpath '//div[@class="etymology"]/preceding-sibling::*' - 2> /dev/null)
 content_div="$start $content_div </body></html>"
@@ -69,3 +70,5 @@ do
 done
 
 echo "</body></html>" >> output.html
+cat output.html
+}
